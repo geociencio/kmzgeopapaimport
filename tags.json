@@ -1,0 +1,467 @@
+[
+    {
+        "sectionname": "sketch note",
+        "sectiondescription": "note with sketch",
+        "forms": [
+            {
+                "formname": "sketch note",
+                "formitems": [
+                    {
+                        "key": "description",
+                        "islabel": "true",
+                        "value": "",
+                        "type": "string",
+                        "mandatory": "no"
+                    },
+                    {
+                        "key": "sketches with drawings of the environment around the note",
+                        "value": "",
+                        "type": "sketch"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "sectionname": "map note",
+        "sectiondescription": "note with map image",
+        "forms": [
+            {
+                "formname": "map image note",
+                "formitems": [
+                    {
+                        "key": "description",
+                        "islabel": "true",
+                        "value": "",
+                        "type": "string",
+                        "mandatory": "no"
+                    },
+                    {
+                        "key": "map around note",
+                        "value": "",
+                        "type": "map"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "sectionname": "text note",
+        "sectiondescription": "a simple text note",
+        "forms": [
+            {
+                "formname": "text note",
+                "formitems": [
+                    {
+                        "key": "title",
+                        "value": "",
+                        "islabel": "true",
+                        "type": "string",
+                        "mandatory": "no"
+                    },
+                    {
+                        "key": "description",
+                        "value": "",
+                        "type": "string",
+                        "mandatory": "no"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "sectionname": "estructural",
+        "sectiondescription": "datos estructurales",
+        "forms": [
+            {
+                "formname": "punto",
+                "formitems": [
+                    {
+                        "key": "punto",
+                        "value": "",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "formname": "tipo de dato",
+                "formitems": [
+                    {
+                        "key": "dato",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "Estratificacion"
+                                },
+                                {
+                                    "item": "Fractura"
+                                },
+                                {
+                                    "item": "Flujo"
+                                },
+                                {
+                                    "item": "Foliacion S1"
+                                },
+                                {
+                                    "item": "Foliacion S2"
+                                },
+                                {
+                                    "item": "Seudoestratificacion"
+                                },
+                                {
+                                    "item": "Veta"
+                                },
+                                {
+                                    "item": "Falla"
+                                },
+                                {
+                                    "item": "Domo"
+                                },
+                                {
+                                    "item": "Dique andesitico"
+                                },
+                                {
+                                    "item": "Dique dasitico"
+                                },
+                                {
+                                    "item": "Dique dioritico"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "stringcombo"
+                    }
+                ]
+            },
+			{
+                "formname": "rumbo",
+                "formitems": [
+                    {
+                        "key": "rumbo",
+                        "value": "",
+                        "type": "integer"
+                    }
+                ]
+            },
+            {
+                "formname": "rumbodir",
+                "formitems": [
+                    {
+                        "key": "rumbodir",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "NW"
+                                },
+                                {
+                                    "item": "NE"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "multistringcombo"
+                    }
+                ]
+            },
+			{
+                "formname": "echado",
+                "formitems": [
+                    {
+                        "key": "echado",
+                        "value": "",
+                        "type": "integer"
+                    }
+                ]
+            },
+            {
+                "formname": "echadodir",
+                "formitems": [
+                    {
+                        "key": "echadodir",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "NW"
+                                },
+                                {
+                                    "item": "NE"
+                                },
+                                {
+                                    "item": "SW"
+                                },
+                                {
+                                    "item": "SE"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "multistringcombo"
+                    }
+                ]
+            },
+            {
+                "formname": "Litologia",
+                "formitems": [
+                    {
+                        "key": "litologia:",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "Caliza (Cz)"
+                                },
+                                {
+                                    "item": "Marga (Mg)"
+                                },
+                                {
+                                    "item": "Dolomia (Do)"
+                                },
+                                {
+                                    "item": "Travertino (Tr)"
+                                },
+                                {
+                                    "item": "Lutita (Lu)"
+                                },
+                                {
+                                    "item": "Limolita (Lm)"
+                                },
+                                {
+                                    "item": "Conglomerado Oligomictico (Cgo)"
+                                },
+                                {
+                                    "item": "Conglomerado Polimictico (Cgp)"
+                                },
+                                {
+                                    "item": "Arenisca (Ar)"
+                                },
+                                {
+                                    "item": "Yeso (Y)"
+                                },
+                                {
+                                    "item": "Anhidrita (Ah)"
+                                },
+                                {
+                                    "item": "Coquina (Cq)"
+                                },
+                                {
+                                    "item": "Brecha polimictica (Brp)"
+                                },
+                                {
+                                    "item": "Brecha oligomictica (Bro)"
+                                },
+                                {
+                                    "item": "Diatomita (Dt)"
+                                },
+                                {
+                                    "item": "Volcanico sedimentario (Vs)"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "stringcombo"
+                    }
+                ]
+            },
+			{
+                "formname": "color en roca fresca",
+                "formitems": [
+                    {
+                        "key": "color fresca",
+                        "value": "",
+                        "type": "string"
+                    }
+                ]
+            },
+			{
+                "formname": "color en roca alterada",
+                "formitems": [
+                    {
+                        "key": "color alterada",
+                        "value": "",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "formname": "textura",
+                "formitems": [
+                    {
+                        "key": "textura:",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "Mudstone"
+                                },
+                                {
+                                    "item": "Wackstone"
+                                },
+                                {
+                                    "item": "Packstone"
+                                },
+                                {
+                                    "item": "Grainstone"
+                                },
+                                {
+                                    "item": "Boundstone"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "stringcombo"
+                    }
+                ]
+            },
+			{
+                "formname": "de",
+                "formitems": [
+                    {
+                        "key": "de",
+                        "value": "",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "formname": "Estructura sedimentaria",
+                "formitems": [
+                    {
+                        "key": "estructura sedimentaria",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "plana"
+                                },
+                                {
+                                    "item": "cruzada"
+                                },
+                                {
+                                    "item": "boudinage"
+                                },
+                                {
+                                    "item": "organicas"
+                                },
+                                {
+                                    "item": "gradada"
+                                },
+                                {
+                                    "item": "rizaduras"
+                                },
+                                {
+                                    "item": "lenticular"
+                                },
+                                {
+                                    "item": "convolutas"
+                                },
+                                {
+                                    "item": "estilolitas"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "stringcombo"
+                    }
+                ]
+            },
+            {
+                "formname": "Espesor de los estratos",
+                "formitems": [
+                    {
+                        "key": "espesor",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "Laminares (menor a 10mm)"
+                                },
+                                {
+                                    "item": "Delgados (1cm a 3cm)"
+                                },
+                                {
+                                    "item": "Medianos (3cm a 10cm)"
+                                },
+                                {
+                                    "item": "Gruesos (10cm a 1m)"
+                                },
+                                {
+                                    "item": "Masivos (mayor a 1m)"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "stringcombo"
+                    }
+                ]
+            },
+            {
+                "formname": "Edad",
+                "formitems": [
+                    {
+                        "key": "edad",
+                        "values": {
+                            "items": [
+                                {
+                                    "item": "Aluvion,(Qho al)"
+                                },
+                                {
+                                    "item": "Coluvion,(Qho co)"
+                                },
+                                {
+                                    "item": "Potrerillos,(Kmpa Lu-Ar)"
+                                },
+                                {
+                                    "item": "Muerto,(Km Ar-Lu)"
+                                },
+                                {
+                                    "item": "Parras,(Kc Lu)"
+                                },
+                                {
+                                    "item": "Austin,(Kcoss Lu-Cz)"
+                                },
+                                {
+                                    "item": "Eagle Ford,(Kcet Lu-Cz)"
+                                },
+                                {
+                                    "item": "Washita,(Kace Cz-Lu)"
+                                },
+                                {
+                                    "item": "Kiamichi,(Ka Cz-Lu)"
+                                },
+                                {
+                                    "item": "Aurora,(Ka Cz-Do)"
+                                },
+								{
+                                    "item": "La Peña,(Kap Lu-Cz)"
+                                },
+                                {
+                                    "item": "Cupido,(Khap Cz)"
+                                },
+                                {
+                                    "item": "Taraises,(Kbeh Cz-Lu)"
+                                },
+                                {
+                                    "item": "La Casita,(Jkt Lu-Cz)"
+                                },
+                                {
+                                    "item": "Zuloaga,(Jok Cz)"
+                                },
+                                {
+                                    "item": "Minas Viejas,(Jo Y-Cz)"
+                                }
+                            ]
+                        },
+                        "value": "",
+                        "type": "stringcombo"
+                    }
+                ]
+            },
+			{
+                "formname": "Observaciones",
+                "formitems": [
+                    {
+                        "key": "Observaciones",
+                        "value": "",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    }
+]
