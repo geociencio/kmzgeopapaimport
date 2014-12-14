@@ -58,7 +58,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Convet KMZ to CSV exported from Geopaparazzi based on JSON forms</string>
+    <string>Convert KMZ to CSV exported from Geopaparazzi based on JSON forms</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
