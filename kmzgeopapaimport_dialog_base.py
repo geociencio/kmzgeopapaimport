@@ -112,7 +112,7 @@ class Ui_kmlppcsvDialogBase(object):
 
     def retranslateUi(self, kmlppcsvDialogBase):
         kmlppcsvDialogBase.setWindowTitle(QtGui.QApplication.translate("kmlppcsvDialogBase", "kmzgeopapaimport", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_1.setText(QtGui.QApplication.translate("kmlppcsvDialogBase", "Convet KMZ to CSV exported from Geopaparazzi based on JSON forms", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_1.setText(QtGui.QApplication.translate("kmlppcsvDialogBase", "Convert KMZ to CSV exported from Geopaparazzi based on JSON forms", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("kmlppcsvDialogBase", "JSON file", None, QtGui.QApplication.UnicodeUTF8))
         self.examinarjson.setText(QtGui.QApplication.translate("kmlppcsvDialogBase", "Search", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("kmlppcsvDialogBase", "KMZ file", None, QtGui.QApplication.UnicodeUTF8))
