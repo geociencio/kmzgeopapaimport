@@ -1,292 +1,319 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>kmlppcsvDialogBase</class>
- <widget class="QDialog" name="kmlppcsvDialogBase">
+ <class>kmz_geopapaimportDialogBase</class>
+ <widget class="QDialog" name="kmz_geopapaimportDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
-    <height>198</height>
+    <width>275</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>kmzgeopapaimport</string>
+   <string>Impport kmz files</string>
   </property>
-  <widget class="QDialogButtonBox" name="button_box">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>265</x>
-     <y>166</y>
-     <width>251</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="jsonarcbase">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>20</y>
-     <width>320</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_1">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
+     <x>40</x>
      <y>0</y>
-     <width>451</width>
+     <width>191</width>
      <height>20</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <italic>true</italic>
-     <bold>true</bold>
-    </font>
    </property>
    <property name="text">
-    <string>Convet KMZ to CSV exported from Geopaparazzi based on JSON forms</string>
+    <string>KMZ to CSV from Geopaparazzi</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>91</width>
-     <height>16</height>
+     <x>60</x>
+     <y>15</y>
+     <width>151</width>
+     <height>18</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
    </property>
    <property name="text">
-    <string>JSON file</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="examinarjson">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>20</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Search</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="formatosjson">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>50</y>
-     <width>160</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>91</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>KMZ file</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="kmzarcentrada">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>80</y>
-     <width>320</width>
-     <height>20</height>
-    </rect>
+    <string>(Based on JSON format)</string>
    </property>
   </widget>
   <widget class="QPushButton" name="examinarkmz">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>80</y>
-     <width>75</width>
-     <height>23</height>
+     <x>180</x>
+     <y>50</y>
+     <width>86</width>
+     <height>26</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
    </property>
    <property name="text">
     <string>Search</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QPushButton" name="examinarjson">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>55</y>
-     <width>31</width>
-     <height>16</height>
+     <x>180</x>
+     <y>110</y>
+     <width>86</width>
+     <height>26</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
    <property name="text">
-    <string>Form</string>
+    <string>Search</string>
    </property>
   </widget>
   <widget class="QPushButton" name="destino">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>110</y>
-     <width>75</width>
-     <height>23</height>
+     <x>180</x>
+     <y>170</y>
+     <width>86</width>
+     <height>26</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
    </property>
    <property name="text">
     <string>Search</string>
    </property>
   </widget>
+  <widget class="QLineEdit" name="kmzarcentrada">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>80</y>
+     <width>271</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="jsonarcbase">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>140</y>
+     <width>271</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QLineEdit" name="csvarch">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>110</y>
-     <width>160</width>
-     <height>20</height>
+     <x>0</x>
+     <y>200</y>
+     <width>271</width>
+     <height>26</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QComboBox" name="formatosjson">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>250</y>
+     <width>151</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="gtprjbox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>280</y>
+     <width>271</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Add point transformation?</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <widget class="QPushButton" name="crsproject">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>70</y>
+      <width>86</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Project</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="crsactlayer">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>100</y>
+      <width>86</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Active Layer</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>50</y>
+      <width>81</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Get CRS from:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>251</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(This action add xtrans and ytrans fields)</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="crsproj4string">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>70</y>
+      <width>181</width>
+      <height>61</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>110</y>
-     <width>81</width>
-     <height>16</height>
+     <x>0</x>
+     <y>230</y>
+     <width>58</width>
+     <height>18</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
+   <property name="text">
+    <string>Form</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="resetdata">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>440</y>
+     <width>86</width>
+     <height>26</height>
+    </rect>
    </property>
    <property name="text">
-    <string>Output folder</string>
+    <string>Reset Data</string>
    </property>
   </widget>
   <widget class="QPushButton" name="procesardat">
    <property name="geometry">
     <rect>
-     <x>359</x>
-     <y>138</y>
-     <width>75</width>
-     <height>23</height>
+     <x>180</x>
+     <y>440</y>
+     <width>86</width>
+     <height>26</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
    <property name="text">
-    <string>Process</string>
+    <string>Process Data</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="datos">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>130</y>
-     <width>241</width>
-     <height>64</height>
+     <x>13</x>
+     <y>470</y>
+     <width>251</width>
+     <height>51</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>60</y>
+     <width>58</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>58</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>180</y>
+     <width>58</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Output folder</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="help">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>530</y>
+     <width>86</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exit">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>530</y>
+     <width>86</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>exit</string>
    </property>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>button_box</sender>
-   <signal>accepted()</signal>
-   <receiver>kmlppcsvDialogBase</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>button_box</sender>
-   <signal>rejected()</signal>
-   <receiver>kmlppcsvDialogBase</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
