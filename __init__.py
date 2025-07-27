@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .kmz_geopapaimport import kmz_geopapaimport
+    from .kmzgeopapaimport import kmz_geopapaimport
     return kmz_geopapaimport(iface)

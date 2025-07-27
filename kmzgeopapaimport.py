@@ -36,9 +36,9 @@ from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
-from .kmz_geopapaimport_dialog import kmz_geopapaimportDialog
+from .kmzgeopapaimport_dialog import kmz_geopapaimportDialog
 # Initialize Qt resources from file resources.py
-from .resources import *
+from .resources_rc import *
 
 
 class kmz_geopapaimport:

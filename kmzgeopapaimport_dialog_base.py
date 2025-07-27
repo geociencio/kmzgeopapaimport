@@ -1,6 +1,6 @@
-    # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'kmz_geopapaimport_dialog_base.ui'
+# Form implementation generated from reading ui file 'kmzgeopapaimport_dialog_base.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #

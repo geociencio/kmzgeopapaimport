@@ -30,8 +30,8 @@ from qgis.PyQt import QtCore, QtWidgets
 from qgis.core import Qgis, QgsProject
 from qgis.gui import QgsMessageBar
 
-from . import kmz_geopapaimport
-from .kmz_geopapaimport_dialog_base import Ui_kmz_geopapaimportDialogBase
+from . import kmzgeopapaimport
+from .kmzgeopapaimport_dialog_base import Ui_kmz_geopapaimportDialogBase
 
 
 class kmz_geopapaimportDialog(QtWidgets.QDialog, Ui_kmz_geopapaimportDialogBase):
@@ -178,7 +178,7 @@ class kmz_geopapaimportDialog(QtWidgets.QDialog, Ui_kmz_geopapaimportDialogBase)
             self.datos.setText(self.tr(f"Processing {form_name}..."))
             QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
-            output_path = kmz_geopapaimport.process_kmz_file(
+            output_path = kmzgeopapaimport.process_kmz_file(
                 kmz_file,
                 json_file,
                 dest_folder,
