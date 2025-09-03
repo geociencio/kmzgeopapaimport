@@ -21,28 +21,41 @@
  *                                                                         *
  ***************************************************************************/
 """
-import json
-import re
-import xml.etree.ElementTree as ET
-from pathlib import Path
-from zipfile import BadZipFile, ZipFile
 
+import csv
+import os.path
+import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
+from zipfile import BadZipFile, ZipFile
+from dataclasses import asdict, dataclass, field
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsProject,
 )
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
-from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from PyQt5.QtCore import QCoreApplication, QSettings, QTranslator, qVersion
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QAction
 
 from .kmzgeopapaimport_dialog import kmz_geopapaimportDialog
+
 # Initialize Qt resources from file resources.py
 from .resources_rc import *
 
 
 class kmz_geopapaimport:
     """QGIS Plugin Implementation."""
+
+    NS = {"kml": "http://www.opengis.net/kml/2.2"}
+    # This KML namespace dictionary is used to define the KML
+    # namespace for XML parsing. It allows thw ElementTree
+    # functions to correctly find elements within the KML file
+    NO_FORM = "__NO_FORM__"
+    # This constant is to represent placemarks that do not
+    # belong to any specific form. It is used as a key in
+    # dictionaries to group placemarks without a form.
 
     def __init__(self, iface):
         """Constructor.
@@ -65,6 +78,8 @@ class kmz_geopapaimport:
             self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
+        # Create the dialog (after translation) and keep reference
+        self.dlg = kmz_geopapaimport(self, self.iface)
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr("&Impport kmz files")
@@ -188,132 +203,360 @@ class kmz_geopapaimport:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start:
             self.first_start = False
-            self.dlg = kmz_geopapaimportDialog(parent=self.iface.mainWindow(), plugin=self)
-
         # show the dialog
         self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
 
+    @dataclass
+    class PlacemarkData:
+        """Data class to hold extracted placemark data.
+        This class is used to store the name, coordinates (longitude, latitude,
+        altitude), and any additional structured data extracted from the
+        placemark's description.
+        """
 
-def _get_form_fields(json_path, form_index):
-    """Extracts the required form fields from the JSON file."""
-    try:
-        with open(json_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return [
-            item["key"]
-            for item in data[form_index]["forms"][0].get("formitems", [])
-        ]
-    except (json.JSONDecodeError, FileNotFoundError, IndexError) as e:
-        raise ValueError(QCoreApplication.translate("kmz_geopapaimport", f"Could not process JSON file: {e}"))
+        name: str = ""
+        longitude: str = ""
+        latitude: str = ""
+        altitude: str = ""
+        extra: dict[str, Any] = field(default_factory=dict)
 
+    class _H1HTMLParser(HTMLParser):
+        """
+        A simple HTML parser to extract the content of the <h1> tag.
+        This class extends the HTMLParser from the html.parser module
+        to specifically parse HTML and extract the text content of the first <h1>
+        tag found.
+        """
 
-def _get_kml_root(kmz_path):
-    """Extracts and parses the KML file from a KMZ archive."""
-    try:
-        with ZipFile(kmz_path, "r") as kmz:
-            if "kml.kml" not in kmz.namelist():
-                raise FileNotFoundError(QCoreApplication.translate("kmz_geopapaimport", "kml.kml not found in the KMZ archive."))
-            with kmz.open("kml.kml", "r") as kml_file:
-                return ET.parse(kml_file).getroot()
-    except (BadZipFile, FileNotFoundError) as e:
-        raise ValueError(f"Could not process KMZ file: {e}")
+        def __init__(self):
+            super().__init__()
+            self.in_h1 = False
+            self.text = None
 
+        def handle_starttag(self, tag, attrs):
+            """Handles the start of an HTML tag."""
+            if tag.lower() == "h1":
+                self.in_h1 = True
 
-def _clean_html_description(description):
-    """Cleans the HTML content from the description tag."""
-    text = re.sub(r"\n{2,}", ",", description)
-    text = re.sub(r"\n", "", text)
-    text = re.sub(
-        r'<table.*?>.*?<tbody><tr><td.*?>.*?</td><td.*?>',
-        "",
-        text,
-        flags=re.DOTALL,
-    )
-    text = re.sub(r"</td></tr></tbody></table>", "", text)
-    text = re.sub(r"<h2>.*?</h2>", ",", text)
-    text = re.sub(r"<.*?>", "", text)
-    return text
+        def handle_endtag(self, tag):
+            """Handles the end of an HTML tag."""
+            if tag.lower() == "h1":
+                self.in_h1 = False
 
+        def handle_data(self, data):
+            """Handles the data within an HTML tag."""
+            if self.in_h1 and not self.text:
+                self.text = data.strip()
 
-def _get_coord_transformer(transform_coords, crs_proj4_string):
-    """Creates a coordinate transformer if needed."""
-    if not transform_coords:
-        return None
+    class _TableDataExtractor(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self._in_td = False
+            self._current_text = []  # type: List[str]
+            self.all_td_contents = {}  # type: Dict[str, str]
 
-    prj4_in = "+proj=longlat +datum=WGS84 +no_defs"
-    prj4_out = crs_proj4_string
+        def handle_starttag(self, tag: str, attrs):
+            if tag.lower() == "td":
+                self._in_td = True
 
-    if not prj4_out:
-        raise ValueError(QCoreApplication.translate("kmz_geopapaimport", "CRS for transformation is not defined."))
+        def handle_endtag(self, tag: str):
+            if tag.lower() == "td":
+                self._in_td = False
+            elif tag.lower() == "tr":
+                if len(self._current_text) == 2:
+                    key = self._current_text[0].strip()
+                    value = self._current_text[1].strip()
+                    if key:
+                        self.all_td_contents[key] = value
+                self._current_text = []
 
-    source_crs = QgsCoordinateReferenceSystem()
-    source_crs.createFromProj4(prj4_in)
-    dest_crs = QgsCoordinateReferenceSystem()
-    dest_crs.createFromProj4(prj4_out)
+        def handle_data(self, all_td_contents: str):
+            if self._in_td:
+                self._current_text.append(all_td_contents)
 
-    return QgsCoordinateTransform(source_crs, dest_crs, QgsProject.instance())
+    def _parse_description(self, html: Optional[str]) -> Dict[str, str]:
+        """
+        Parses an HTML string to extract key-value pairs from a table.
+        """
+        if not html:
+            return {}
+        parser = self._TableDataExtractor()
+        parser.feed(html or "")
+        return parser.all_td_contents
 
+    def get_document_names(self, file_path: Path) -> str:
+        """
+        Extracts the main document name from a KML or KMZ file.
 
-def process_kmz_file(
-    kmz_path,
-    json_path,
-    dest_folder,
-    form_index,
-    form_name,
-    transform_coords,
-    crs_proj4_string,
-):
-    """
-    Processes the KMZ file and generates a CSV.
-    Lanza una excepción ValueError si algo sale mal.
-    """
-    form_fields = _get_form_fields(json_path, form_index)
-    kml_root = _get_kml_root(kmz_path)
-    coord_transformer = _get_coord_transformer(transform_coords, crs_proj4_string)
+        The document name is the content of the <name> tag that is a direct
+        child of the <Document> tag.
 
-    output_path = dest_folder / f"{form_name}.csv"
-    with open(output_path, "w", encoding="utf-8") as csv_file:
-        # Write header
-        header = ["formato"] + form_fields
-        if coord_transformer:
-            header.extend(["lon", "lat", "alt", "xrep", "yrep"])
-        csv_file.write(",".join(header) + "\n")
+        Args:
+            file_path: The path to the .kml or .kmz file.
 
-        # Write data rows
-        for placemark in kml_root.iterfind(
-            ".//{http://www.opengis.net/kml/2.2}Placemark"
-        ):
-            name_element = placemark.find("{http://www.opengis.net/kml/2.2}name")
-            if name_element is None or name_element.text != form_name:
-                continue
+        Returns:
+            The document name as a string.
 
-            description_element = placemark.find(
-                "{http://www.opengis.net/kml/2.2}description"
+        Raises:
+            ValueError: If the file is not a KML/KMZ or does not contain a
+                        valid KML.
+            FileNotFoundError: If the file does not exist.
+        """
+        if not file_path.exists():
+            raise FileNotFoundError(f"File not found at: {file_path}")
+
+        root = None
+        try:
+            if file_path.suffix.lower() == ".kmz":
+                with ZipFile(file_path, "r") as kmz:
+                    # Look for the first .kml file in the KMZ
+                    kml_files = [
+                        f for f in kmz.namelist() if f.lower().endswith(".kml")
+                    ]
+                    if not kml_files:
+                        raise ValueError("No .kml file was found inside the KMZ.")
+                    # Open and parse the KML file
+                    with kmz.open(kml_files[0]) as kml_file:
+                        root = ET.parse(kml_file).getroot()
+            elif file_path.suffix.lower() == ".kml":
+                root = ET.parse(file_path).getroot()
+            else:
+                raise ValueError("File type not supported. Use .kml o .kmz.")
+
+            # Look for the <name> tag under <Document>
+            doc_name_element = root.find("kml:Document/kml:name", self.NS)
+
+            if doc_name_element is not None and doc_name_element.text:
+                return doc_name_element.text.strip()
+            else:
+                return "Document name not found."
+
+        except (ET.ParseError, BadZipFile):
+            raise ValueError(
+                f"Error to parse file, make sure it is a valid KML/KMZ: {file_path}"
             )
-            coordinates_element = placemark.find(
-                ".//{http://www.opengis.net/kml/2.2}coordinates"
-            )
 
-            if description_element is None or coordinates_element is None:
-                continue
+    def get_placemark_names(self, kmz_path: Path) -> Set[str]:
+        """Extracts all unique Placemark names from a KML/KMZ file."""
+        try:
+            if kmz_path.suffix.lower() == ".kmz":
+                with ZipFile(kmz_path, "r") as kmz:
+                    kml_files = [
+                        f for f in kmz.namelist() if f.lower().endswith(".kml")
+                    ]
+                    if not kml_files:
+                        raise ValueError("No KML file found in KMZ")
+                    with kmz.open(kml_files[0]) as kml_file:
+                        root = ET.parse(kml_file).getroot()
+            else:
+                root = ET.parse(kmz_path).getroot()
+            placemarks = root.findall(".//kml:Placemark", self.NS)
+            unique_names = set()
+            for name in placemarks:
+                description_elem = name.find("kml:description", self.NS)
+                if description_elem is not None and description_elem.text:
+                    desc_html = description_elem.text.strip()
+                else:
+                    desc_html = ""
+                form_name = self.get_form_name(desc_html)
+                if form_name:
+                    unique_names.add(form_name)
+            return unique_names
+        except (ET.ParseError, BadZipFile, FileNotFoundError) as e:
+            raise ValueError(f"Error to read file: {e}") from e
 
-            # Extract data and coordinates
-            description_text = _clean_html_description(description_element.text)
-            row_data = [form_name] + description_text.split(",")
+    def get_form_name(self, html_string):
+        """
+        Parses an HTML string to extract the content of the first <h1> tag.
+        If no <h1> tag is found, returns None.
+        Args:
+            html_string (str): The HTML string to parse.
+        Returns:
+            str or None: The content of the first <h1> tag,
+            or None if not found.
+        """
 
-            # Transform coordinates if requested
-            if coord_transformer:
-                coords_text = coordinates_element.text.strip()
-                lon, lat, alt = coords_text.split(",")
-                point = coord_transformer.transform(float(lon), float(lat))
-                row_data.extend([lon, lat, alt, str(point.x()), str(point.y())])
+        parser = self._H1HTMLParser()
+        parser.feed(html_string or "")
+        return parser.text
 
-            csv_file.write(",".join(row_data) + "\n")
-    return output_path
+    def _group_placemarks_by_form(
+        self, kmz_file_path: str
+    ) -> dict[str, list[ET.Element]]:
+        """
+        Parses a KMZ file and groups KML placemarks by the form name
+        extracted from their description.
+        Args:
+            kmz_file_path (str): Path to the KMZ file to be parsed.
+        Returns:
+            dict: A dictionary where keys are form names (str) and values are
+                lists of placemark elements (xml.etree.ElementTree.Element).
+        Raises:
+            ValueError: If no .kml file is found inside the KMZ archive.
+        Note:
+            The function expects a helper function `get_form_name`
+            to extract the form name from the placemark's description HTML.
+        """
+        with ZipFile(kmz_file_path, "r") as kmz:
+            kml_file = None
+            for name in kmz.namelist():
+                if name.endswith(".kml"):
+                    kml_file = name
+                    break
+            if not kml_file:
+                raise ValueError(f"No .kml file found in {kmz_file_path}")
+            kml_content = kmz.read(kml_file)
+
+        root = ET.fromstring(kml_content)
+        placemarks = root.findall(".//kml:Placemark", self.NS)
+        forms = {}
+        for pm in placemarks:
+            description_element = pm.find("kml:description", self.NS)
+            if description_element is not None and description_element.text:
+                desc_html = description_element.text.strip()
+            else:
+                desc_html = ""
+            form_name = self.get_form_name(desc_html) or self.NO_FORM
+            if form_name:
+                if form_name not in forms:
+                    forms[form_name] = []
+                forms[form_name].append(pm)
+        return forms
+
+    def _extract_placemark_data(self, placemark: ET.Element) -> dict[str, str]:
+        """
+        Extracts relevant data from a KML Placemark XML element.
+        This function parses the provided Placemark element to extract its name,
+            coordinates (longitude, latitude, altitude),
+            and description. The description is further processed to extract
+            additional structured data using the `_parse_description` function.
+        Args:
+            placemark (xml.etree.ElementTree.Element):
+                The Placemark XML element to extract data from.
+        Returns:
+            dict: A dictionary containing extracted data fields
+                    such as 'Name', 'Longitude', 'Latitude', 'Altitude',
+                    and any additional fields parsed from the description.
+        Extracts all relevant data from a single placemark element.
+        """
+        name = ""
+        longitude = ""
+        latitude = ""
+        altitude = ""
+        extra = {}
+
+        name_element = placemark.find("kml:name", self.NS)
+        if name_element is not None and name_element.text:
+            name = name_element.text.strip()
+
+        coordinates_element = placemark.find(".//kml:coordinates", self.NS)
+        if coordinates_element is not None and coordinates_element.text:
+            coordinates_string = coordinates_element.text.strip()
+            coords = coordinates_string.split(",")
+            if len(coords) == 3:
+                longitude = coords[0]
+                latitude = coords[1]
+                altitude = coords[2]
+            elif len(coords) == 2:
+                longitude = coords[0]
+                latitude = coords[1]
+            elif len(coords) == 1:
+                longitude = coords[0]
+        description_element = placemark.find("kml:description", self.NS)
+        if description_element is not None and description_element.text:
+            description_html = description_element.text.strip()
+            extra = self._parse_description(description_html)
+        return self.PlacemarkData(
+            name=name,
+            longitude=longitude,
+            latitude=latitude,
+            altitude=altitude,
+            extra=extra,
+        )
+
+    def process_kmz_data(
+        self,
+        kmz_file: Path,
+        output_dir: Path,
+        ncsv: str,
+        crs_proj4: str,
+        gtprjbox_checked: bool,
+    ) -> str:
+        """Process KMZ data and save to CSV."""
+        try:
+            document_name = self.get_document_names(kmz_file)
+            if document_name != "Geopaparazzi Export":
+                return f"Error: Document name is '{document_name}', should be 'Geopaparazzi Export'."
+
+            forms = self._group_placemarks_by_form(kmz_file)
+            if ncsv not in forms:
+                return f"Form not found '{ncsv}' in KMZ file."
+
+            selected_form: list[ET.Element] = forms[ncsv]
+            all_placemarks_data: list[dict[str, Any]] = []
+
+            # ---- Start of transformation logic ----
+            transformer = None
+            if gtprjbox_checked and crs_proj4:
+                source_crs = QgsCoordinateReferenceSystem("EPSG:4326")  # WGS 84
+                dest_crs = QgsCoordinateReferenceSystem()
+                dest_crs.createFromProj(crs_proj4)
+                # In QGIS 3, QgsProject.instance() is used
+                transformer = QgsCoordinateTransform(
+                    source_crs, dest_crs, QgsProject.instance()
+                )
+
+            for pm in selected_form:
+                placemark_data_obj = self._extract_placemark_data(pm)
+                placemark_dict = asdict(placemark_data_obj)
+                if "extra" in placemark_dict:
+                    placemark_dict.update(placemark_dict.pop("extra"))
+
+                # Add new fields for transformed coordinates
+                placemark_dict["xtrsf"] = ""
+                placemark_dict["ytrsf"] = ""
+
+                if (
+                    transformer
+                    and placemark_dict.get("longitude")
+                    and placemark_dict.get("latitude")
+                ):
+                    try:
+                        lon = float(placemark_dict["longitude"])
+                        lat = float(placemark_dict["latitude"])
+                        # transform the point
+                        transformed_point = transformer.transform(lon, lat)
+                        placemark_dict["xtrsf"] = transformed_point.x()
+                        placemark_dict["ytrsf"] = transformed_point.y()
+                    except (ValueError, TypeError):
+                        # If conversion fails, leave transformed fields empty
+                        pass
+
+                all_placemarks_data.append(placemark_dict)
+            # ---- End of transformation logic ----
+
+            if not all_placemarks_data:
+                return "No placemarks found in the selected form."
+
+            # Determine CSV fieldnames from the first placemark's keys
+            fieldnames = list(all_placemarks_data[0].keys())
+
+            output_csv_path = Path(output_dir)
+            output_csv_path.mkdir(parents=True, exist_ok=True)
+            csv_filename: str = f"{ncsv.replace(' ', '_').lower()}.csv"
+            csv_filepath: Path = output_csv_path / csv_filename
+            with open(csv_filepath, "w", newline="", encoding="utf-8") as csvfile:
+                writer = csv.DictWriter(
+                    csvfile, fieldnames=fieldnames, extrasaction="ignore"
+                )
+                writer.writeheader()
+                writer.writerows(all_placemarks_data)
+
+            summary = f"Archivo KMZ procesado exitosamente.\n"
+            summary += f"CSV guardado en: {csv_filepath}"
+            return summary
+
+        except (FileNotFoundError, ValueError, BadZipFile) as e:
+            return f"Error al procesar el archivo: {e}"
+        except Exception as e:
+            return f"Error inesperado: {e}"

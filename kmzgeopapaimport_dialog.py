@@ -21,137 +21,220 @@
  ***************************************************************************/
 """
 
-import json
+import os
+import urllib.parse
 import webbrowser
 from pathlib import Path
 from zipfile import BadZipFile
-
-from qgis.PyQt import QtCore, QtWidgets
-from qgis.core import Qgis, QgsProject
+from qgis.core import Qgis
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QFileDialog, QDialog, QMessageBox, QApplication
 from qgis.gui import QgsMessageBar
-
-from . import kmzgeopapaimport
+from qgis.utils import iface
 from .kmzgeopapaimport_dialog_base import Ui_kmz_geopapaimportDialogBase
 
 
-class kmz_geopapaimportDialog(QtWidgets.QDialog, Ui_kmz_geopapaimportDialogBase):
-    def __init__(self, parent=None, plugin=None):
+class kmz_geopapaimportDialog(QDialog, Ui_kmz_geopapaimportDialogBase):
+    """Dialog for Kmzgeopapaimport plugin.
+    It loads the kmzgeopapaimport_dialog_base.ui file to define the dialog
+    layout and widgets.
+    """
+
+    def __init__(self, plugin_instance, iface, parent=None):
         """Constructor."""
         super(kmz_geopapaimportDialog, self).__init__(parent)
+        self.iface = iface
+        self.plugin_instance = plugin_instance
+        # Set up the user interface from Designer
         self.setupUi(self)
-        self.messageBar = QgsMessageBar(self)
-        self.plugin = plugin
-        self.setAcceptDrops(True)
+        self.gtprjbox.setChecked(False)
+        self.messagebar = QgsMessageBar(self)
+        self.kmzarcentrada.setAcceptDrops(True)
+        self.Cancel.clicked.connect(self.close)
+        self.kmzarcentrada.textChanged.connect(self._update_kml_names)
+        self.kmzarcentrada.textChanged.connect(self._update_placemark_names)
 
     def dragEnterEvent(self, event):
         """Event that is sent to a widget when a drag and drop action enters it."""
         if event.mimeData().hasUrls():
             event.acceptProposedAction()
         else:
-            event.ignore()
+            super().dragEnterEvent(event)
 
     def dropEvent(self, event):
-        """Event that is sent when a drag and drop action is completed."""
-        urls = event.mimeData().urls()
-        if not urls:
+        """drop event"""
+        if not event.mimeData().hasUrls:
             return
-
-        file_path = Path(urls[0].toLocalFile())
-
-        if file_path.suffix.lower() == ".kmz":
-            self.kmzarcentrada.setText(str(file_path))
-            event.acceptProposedAction()
-        elif file_path.suffix.lower() == ".json":
-            self.jsonarcbase.setText(str(file_path))
-            self.on_examinarjson_clicked(file_path=str(file_path))
-            event.acceptProposedAction()
-        else:
+        # Get the first valid file URL
+        file_urls = next(
+            (url for url in event.mimeData().urls() if url.isLocalFile()), None
+        )
+        if not file_urls:
             event.ignore()
+            return
+        file_path = file_urls.url()
+        # Remove the 'file:///' prefix if it exists
+        if file_path.startswith("file:///"):
+            file_path = file_path[len("file:///") :]
+        # Decode URL-encoded characters (e.g., %20 for spaces)
+        file_path = urllib.parse.unquote(file_path)
+        # Normalize the path to handle any inconsistencies (e.g., double slashes, /./, /../)
+        file_path = os.path.normpath(file_path)
+        target_widget = self._get_drop_target_widget(event.pos())
+
+        if not target_widget:
+            event.ignore()
+            return
+        # Handle different drop targets
+        try:
+            if target_widget == self.kmzarcentrada:
+                self._handle_kmz_drop(file_path)
+            elif target_widget == self.csvarch:
+                self._hancle_folder_drop(file_path)
+            else:
+                event.ignore()
+        except ValueError as e:
+            self.messagebar.pushMessage(
+                "Error", str(e), level=Qgis.Critical, duration=5
+            )
+            event.ignore()
+
+    def _update_kml_names(self):
+        """Update the list of documento names based on the KMZ file."""
+        kmz_file_path = self.kmzarcentrada.text()
+        self.docsnames.clear()
+        if kmz_file_path and Path(kmz_file_path).is_file():
+            try:
+                # Call the method in the main plugin class to get document names
+                doc_names = self.plugin_instance.get_document_names(Path(kmz_file_path))
+                if doc_names:
+                    self.docsnames.addItems([doc_names])
+                else:
+                    self.messagebar.pushMessage(
+                        "Info",
+                        self.tr("No documents found in KMZ file."),
+                        level=Qgis.Info,
+                        duration=3,
+                    )
+            except Exception as e:
+                self.messagebar.pushMessage(
+                    "Error",
+                    self.tr(f"Error loading documents: {e}"),
+                    level=Qgis.Critical,
+                    duration=5,
+                )
+
+    def _handle_kmz_drop(self, file_path):
+        """Validate and process KMZ file drop"""
+        if not file_path.lower().endswith(".kmz"):
+            raise ValueError("Invalid file type. Please drop a .kmz file.")
+        if not Path(file_path).is_file():
+            raise ValueError("The dropped KMZ file does not exist.")
+        self.kmzarcentrada.setText(file_path)
+        self.kmzarcentrada.setToolTip(file_path)  # Show full path on hover
+
+    def _handle_folder_drop(self, path):
+        """Validate and process folder drop"""
+        if not path(path).is_dir():
+            raise ValueError("The dropped item is not a valid directory.")
+        if not os.access(path, os.W_OK):
+            raise ValueError("The dropped directory is not writable.")
+        self.csvarch.setText(path)
+        self.csvarch.setToolTip(path)  # Show full path on hover
+
+    def _get_drop_target_widget(self, pos):
+        """Determine which widget the drop occurred on"""
+        widget = {
+            self.kmzarcentrada: [".kmz"],
+            self.csvarch: [],
+        }  # Empty list means any file type (for folders)
+        for widget, extensions in widget.items():
+            if widget.geometry().contains(pos):
+                return widget
+        return None
+
+    def _update_placemark_names(self):
+        kmz_file_path = self.kmzarcentrada.text()
+        self.formatosjson.clear()
+        if kmz_file_path and Path(kmz_file_path).is_file():
+            try:
+                # Call the method in the main plugin class to get placemark names
+                placemark_names = self.plugin_instance.get_placemark_names(
+                    Path(kmz_file_path)
+                )
+                if placemark_names:
+                    self.formatosjson.addItems(placemark_names)
+                else:
+                    self.messagebar.pushMessage(
+                        "Info",
+                        self.tr("No placemarks found in KMZ file."),
+                        level=Qgis.Info,
+                        duration=3,
+                    )
+            except Exception as e:
+                self.messagebar.pushMessage(
+                    "Error",
+                    self.tr(f"Error loading placemarks: {e}"),
+                    level=Qgis.Critical,
+                    duration=5,
+                )
 
     @QtCore.pyqtSlot(name="on_examinarkmz_clicked")
     def on_examinarkmz_clicked(self):
-        """Select kmz file."""
-        kmz_file, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self,
-            self.tr("Select KMZ file"),
-            "",
-            self.tr("KMZ files (*.kmz *.KMZ)"),
+        """select kmz file"""
+        kmz_file, _ = QFileDialog.getOpenFileName(
+            self, self.tr("Select kmz file"), "", self.tr("KMZ Files (*.kmz *.KMZ)")
         )
-        if kmz_file:
-            self.kmzarcentrada.setText(kmz_file)
-
-    @QtCore.pyqtSlot(name="on_examinarjson_clicked")
-    def on_examinarjson_clicked(self, file_path=None):
-        """Select JSON file and populate formats."""
-        if not file_path:
-            file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self,
-                self.tr("Select JSON file"),
-                "",
-                self.tr("JSON files (*.json *.JSON)"),
-            )
-        if not file_path:
+        if not kmz_file:
             return
-
-        self.jsonarcbase.setText(file_path)
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            self.formatosjson.clear()
-            for item in data:
-                self.formatosjson.addItem(item.get("sectionname", "Unnamed Section"))
-        except (json.JSONDecodeError, FileNotFoundError) as e:
-            self.messageBar.pushMessage(
-                self.tr("Error"),
-                self.tr("Could not read or parse JSON file: {error}").format(error=e),
-                level=Qgis.Critical,
-            )
+        self.kmzarcentrada.setText(kmz_file)
 
     @QtCore.pyqtSlot(name="on_destino_clicked")
     def on_destino_clicked(self):
-        """Select destination folder."""
-        folder = QtWidgets.QFileDialog.getExistingDirectory(
+        """select output directory"""
+        self.csvarch.clear()
+        folder = QFileDialog.getExistingDirectory(
             self,
-            self.tr("Select destination folder"),
+            self.tr("Select Output Directory"),
             "",
-            QtWidgets.QFileDialog.ShowDirsOnly
-            | QtWidgets.QFileDialog.DontResolveSymlinks,
+            QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks,
         )
-        if folder:
-            self.csvarch.setText(folder)
+        if not folder:
+            return
+        self.csvarch.setText(folder)
 
     @QtCore.pyqtSlot(name="on_crsproject_clicked")
     def on_crsproject_clicked(self):
         """Set CRS from project."""
-        prj = QgsProject.instance().crs()
-        self.crsproj4string.setText(prj.toProj4())
+        prj = iface.mapCanvas().mapSettings().destinationCrs()
+        self.crsproj4string.setText(prj.toProj())
 
     @QtCore.pyqtSlot(name="on_crsactlayer_clicked")
     def on_crsactlayer_clicked(self):
         """Set CRS from active layer."""
-        layer = self.plugin.iface.activeLayer()
-        if layer:
-            crs = layer.crs()
-            if crs.isValid():
-                self.crsproj4string.setText(crs.toProj4())
+        layer = iface.activeLayer()
+        self.crsproj4string.clear()
+        if layer:  # If there is an active layer
+            prj = layer.crs()
+            if prj.isValid():
+                self.crsproj4string.append(str(prj.toProj()))
             else:
-                self.messageBar.pushMessage(
+                QMessageBox.information(
+                    self,
                     self.tr("Invalid CRS"),
-                    self.tr("The active layer has an invalid CRS."),
-                    level=Qgis.Warning,
+                    self.tr("The active layer does not have a valid CRS."),
                 )
         else:
-            self.messageBar.pushMessage(
-                self.tr("No active layer"),
-                self.tr("There is no active layer in QGIS."),
-                level=Qgis.Info,
+            QMessageBox.information(
+                self,
+                self.tr("No Active Layer"),
+                self.tr("There is no active layer to get the CRS from."),
             )
 
     @QtCore.pyqtSlot(name="on_resetdata_clicked")
     def on_resetdata_clicked(self):
         """Reset all data fields."""
         self.kmzarcentrada.clear()
-        self.jsonarcbase.clear()
         self.csvarch.clear()
         self.formatosjson.clear()
         self.crsproj4string.clear()
@@ -163,29 +246,27 @@ class kmz_geopapaimportDialog(QtWidgets.QDialog, Ui_kmz_geopapaimportDialogBase)
         """Process data from KMZ file based on JSON definition."""
         try:
             # 1. Get user inputs
-            kmz_file = self.kmzarcentrada.text()
-            json_file = self.jsonarcbase.text()
-            dest_folder = Path(self.csvarch.text())
-            form_name = self.formatosjson.currentText()
-            form_index = self.formatosjson.currentIndex()
-            transform_coords = self.gtprjbox.isChecked()
-            crs_proj4_string = self.crsproj4string.toPlainText()
+            kmz_file = Path(self.kmzarcentrada.text())  # Ensure it's a Path object
+            output_dir = Path(self.csvarch.text())  # Ensure it's a Path object
+            ncsv = self.formatosjson.currentText()  # Get the selected form name
+            gtprjbox_checked = (
+                self.gtprjbox.isChecked()
+            )  # Boolean for coordinate transformation
+            crs_proj4 = str(self.crsproj4string.toPlainText())  # Get CRS string
 
-            if not all([kmz_file, json_file, dest_folder, form_name]):
+            if not all([kmz_file, output_dir, ncsv]):
                 raise ValueError(self.tr("All input fields are required."))
 
             # 2. Prepare for processing
-            self.datos.setText(self.tr(f"Processing {form_name}..."))
-            QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+            self.datos.setText(self.tr(f"Processing {ncsv}..."))
+            QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
-            output_path = kmzgeopapaimport.process_kmz_file(
+            output_path = self.plugin_instance.process_kmz_data(
                 kmz_file,
-                json_file,
-                dest_folder,
-                form_index,
-                form_name,
-                transform_coords,
-                crs_proj4_string,
+                output_dir,
+                ncsv,
+                gtprjbox_checked,
+                crs_proj4,
             )
 
             self.datos.append(self.tr(f"\nSuccess! File saved to:\n{output_path}"))
@@ -196,7 +277,7 @@ class kmz_geopapaimportDialog(QtWidgets.QDialog, Ui_kmz_geopapaimportDialogBase)
                 self.tr("Error"), str(e), level=Qgis.Critical, duration=5
             )
         finally:
-            QtWidgets.QApplication.restoreOverrideCursor()
+            QApplication.restoreOverrideCursor()
 
     @QtCore.pyqtSlot(name="on_help_clicked")
     def on_help_clicked(self):
