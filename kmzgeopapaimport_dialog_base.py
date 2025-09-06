@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_kmz_geopapaimportDialogBase(object):
+class UiKmzGeopapaimportDialogBase(object):
     def setupUi(self, kmz_geopapaimportDialogBase):
         kmz_geopapaimportDialogBase.setObjectName("kmz_geopapaimportDialogBase")
         kmz_geopapaimportDialogBase.resize(275, 565)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     kmz_geopapaimportDialogBase = QtWidgets.QDialog()
-    ui = Ui_kmz_geopapaimportDialogBase()
+    ui = UiKmzGeopapaimportDialogBase()
     ui.setupUi(kmz_geopapaimportDialogBase)
     kmz_geopapaimportDialogBase.show()
     sys.exit(app.exec_())

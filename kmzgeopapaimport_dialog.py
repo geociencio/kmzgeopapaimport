@@ -9,7 +9,7 @@
         git sha              : $Format:%H$
         copyright            : (C) 2025 by Juan M. Bernales
         email                : juanbernales@gmail.com
- ***************************************************************************/
+ ***************************************************************************/ 
 
 /***************************************************************************
  *                                                                         *
@@ -18,7 +18,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/
+ ***************************************************************************/ 
 """
 
 import os
@@ -31,10 +31,10 @@ from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QFileDialog, QDialog, QMessageBox, QApplication
 from qgis.gui import QgsMessageBar
 from qgis.utils import iface
-from .kmzgeopapaimport_dialog_base import Ui_kmz_geopapaimportDialogBase
+from .kmzgeopapaimport_dialog_base import UiKmzGeopapaimportDialogBase
 
 
-class kmz_geopapaimportDialog(QDialog, Ui_kmz_geopapaimportDialogBase):
+class kmz_geopapaimportDialog(QDialog, UiKmzGeopapaimportDialogBase):
     """Dialog for Kmzgeopapaimport plugin.
     It loads the kmzgeopapaimport_dialog_base.ui file to define the dialog
     layout and widgets.
@@ -50,7 +50,6 @@ class kmz_geopapaimportDialog(QDialog, Ui_kmz_geopapaimportDialogBase):
         self.gtprjbox.setChecked(False)
         self.messagebar = QgsMessageBar(self)
         self.kmzarcentrada.setAcceptDrops(True)
-        self.Cancel.clicked.connect(self.close)
         self.kmzarcentrada.textChanged.connect(self._update_kml_names)
         self.kmzarcentrada.textChanged.connect(self._update_placemark_names)
 
@@ -102,13 +101,13 @@ class kmz_geopapaimportDialog(QDialog, Ui_kmz_geopapaimportDialogBase):
     def _update_kml_names(self):
         """Update the list of documento names based on the KMZ file."""
         kmz_file_path = self.kmzarcentrada.text()
-        self.docsnames.clear()
+        self.comboBox.clear()
         if kmz_file_path and Path(kmz_file_path).is_file():
             try:
                 # Call the method in the main plugin class to get document names
                 doc_names = self.plugin_instance.get_document_names(Path(kmz_file_path))
                 if doc_names:
-                    self.docsnames.addItems([doc_names])
+                    self.comboBox.addItems([doc_names])
                 else:
                     self.messagebar.pushMessage(
                         "Info",
@@ -265,8 +264,8 @@ class kmz_geopapaimportDialog(QDialog, Ui_kmz_geopapaimportDialogBase):
                 kmz_file,
                 output_dir,
                 ncsv,
-                gtprjbox_checked,
                 crs_proj4,
+                gtprjbox_checked,
             )
 
             self.datos.append(self.tr(f"\nSuccess! File saved to:\n{output_path}"))
