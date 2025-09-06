@@ -23,11 +23,10 @@
 """
 
 import csv
-import os.path
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, Optional, Set
 from zipfile import BadZipFile, ZipFile
 from dataclasses import asdict, dataclass, field
 from qgis.core import (
@@ -555,7 +554,7 @@ class kmz_geopapaimport:
                 writer.writeheader()
                 writer.writerows(all_placemarks_data)
 
-            summary = f"Archivo KMZ procesado exitosamente.\n"
+            summary = "Archivo KMZ procesado exitosamente.\n"
             summary += f"CSV guardado en: {csv_filepath}"
             return summary
 
