@@ -76,13 +76,16 @@ class kmz_geopapaimport:
         if locale_path.exists():
             self.translator = QTranslator()
             self.translator.load(str(locale_path))
-            QCoreApplication.installTranslator(self.translator)
+            if qVersion() > "4.3.3":
+                QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = kmz_geopapaimport(self, self.iface)
+        self.dlg = kmz_geopapaimportDialog(self, self.iface)
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr("&Impport kmz files")
+        self.toolbar = self.iface.addToolBar("kmz_geopapaimport")
+        self.toolbar.setObjectName("kmz_geopapaimport")
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -253,7 +256,7 @@ class kmz_geopapaimport:
             super().__init__()
             self._in_td = False
             self._current_text = []  # type: List[str]
-            self.all_td_contents = {}  # type: Dict[str, str]
+            self.data = {}  # type: Dict[str, str]
 
         def handle_starttag(self, tag: str, attrs):
             if tag.lower() == "td":
@@ -267,12 +270,12 @@ class kmz_geopapaimport:
                     key = self._current_text[0].strip()
                     value = self._current_text[1].strip()
                     if key:
-                        self.all_td_contents[key] = value
+                        self.data[key] = value
                 self._current_text = []
 
-        def handle_data(self, all_td_contents: str):
+        def handle_data(self, data: str):
             if self._in_td:
-                self._current_text.append(all_td_contents)
+                self._current_text.append(data)
 
     def _parse_description(self, html: Optional[str]) -> Dict[str, str]:
         """
@@ -282,7 +285,7 @@ class kmz_geopapaimport:
             return {}
         parser = self._TableDataExtractor()
         parser.feed(html or "")
-        return parser.all_td_contents
+        return parser.data
 
     def get_document_names(self, file_path: Path) -> str:
         """

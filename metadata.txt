@@ -3,11 +3,11 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Impport kmz files
+name=Import kmz files
 qgisMinimumVersion=3.0
 description=Import geopaparazzi tags to csv
 version=0.2
-author=JJuan M. Bernales
+author=Juan M. Bernales
 email=juanbernales@gmail.com
 
 about=Import data from files .kmz generated in Geopaparazzi
