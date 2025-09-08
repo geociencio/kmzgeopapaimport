@@ -82,7 +82,7 @@ class kmz_geopapaimport:
         self.dlg = kmz_geopapaimportDialog(self, self.iface)
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr("&Impport kmz files")
+        self.menu = self.tr("&kmzgeopapaimport")
         self.toolbar = self.iface.addToolBar("kmz_geopapaimport")
         self.toolbar.setObjectName("kmz_geopapaimport")
 
@@ -181,10 +181,10 @@ class kmz_geopapaimport:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ":/plugins/kmz_geopapaimport/icon.png"
+        icon_path = ":/plugins/kmzgeopapaimport/icon.png"
         self.add_action(
             icon_path,
-            text=self.tr("Import kmz from geopaparazzi"),
+            text=self.tr("kmzgeopapaimport"),
             callback=self.run,
             parent=self.iface.mainWindow(),
         )

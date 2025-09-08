@@ -9,7 +9,7 @@
         git sha              : $Format:%H$
         copyright            : (C) 2025 by Juan M. Bernales
         email                : juanbernales@gmail.com
- ***************************************************************************/ 
+ ***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -18,7 +18,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/ 
+ ***************************************************************************/
 """
 
 import os
@@ -36,8 +36,11 @@ from .kmzgeopapaimport_dialog_base import UiKmzGeopapaimportDialogBase
 
 class kmz_geopapaimportDialog(QDialog, UiKmzGeopapaimportDialogBase):
     """Dialog for Kmzgeopapaimport plugin.
-    It loads the kmzgeopapaimport_dialog_base.ui file to define the dialog
+    It loads the kmzgeopapaimport_dialog_base.py file to define the dialog
     layout and widgets.
+    This dialog allows users to import data from KMZ files, extracting placemark
+    information and saving it to CSV files.
+    It also provides tools for coordinate reference system (CRS) management.
     """
 
     def __init__(self, plugin_instance, iface, parent=None):
