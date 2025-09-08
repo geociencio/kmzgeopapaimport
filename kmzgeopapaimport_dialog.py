@@ -38,8 +38,9 @@ class kmz_geopapaimportDialog(QDialog, UiKmzGeopapaimportDialogBase):
     """Dialog for Kmzgeopapaimport plugin.
     It loads the kmzgeopapaimport_dialog_base.py file to define the dialog
     layout and widgets.
-    This dialog allows users to import data from KMZ files, extracting placemark
-    information and saving it to CSV files.
+    This dialog facilitates the selection of KMZ input, output directory,
+    and various processing options. It allows users to import data from KMZ
+    files, extracting placemark information and saving it to CSV files.
     It also provides tools for coordinate reference system (CRS) management.
     """
 
