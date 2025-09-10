@@ -276,7 +276,7 @@ class kmz_geopapaimportDialog(QDialog, UiKmzGeopapaimportDialogBase):
 
         except (ValueError, BadZipFile, FileNotFoundError, IndexError) as e:
             self.datos.append(self.tr(f"\nERROR: {e}"))
-            self.messageBar.pushMessage(
+            self.messagebar.pushMessage(
                 self.tr("Error"), str(e), level=Qgis.Critical, duration=5
             )
         finally:
@@ -290,7 +290,7 @@ class kmz_geopapaimportDialog(QDialog, UiKmzGeopapaimportDialogBase):
         if help_file.exists():
             webbrowser.open(help_file.as_uri())
         else:
-            self.messageBar.pushMessage(
+            self.messagebar.pushMessage(
                 self.tr("Help file not found"),
                 level=Qgis.Warning,
             )
