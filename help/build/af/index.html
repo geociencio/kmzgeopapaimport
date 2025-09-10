@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="af" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Gebruikersgids: KMZ Geopapa Import (v0.2) &#8212; KMZ Geopapa Import 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=38ac3c53"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="guia-de-usuario-kmz-geopapa-import-v0-2">
+<h1>Gebruikersgids: KMZ Geopapa Import (v0.2)<a class="headerlink" href="#guia-de-usuario-kmz-geopapa-import-v0-2" title="Link to this heading">¶</a></h1>
+<p>Hierdie QGIS-inprop laat jou toe om data van <code class="docutils literal notranslate"><span class="pre">.kmz</span></code>-lêers wat deur die <strong>Geopaparazzi</strong>-toepassing gegenereer is, in te voer en dit om te skakel na CSV-lêers vir gebruik in QGIS of ander sagteware.</p>
+<section id="pasos-para-la-importacion">
+<h2>Invoerstappe<a class="headerlink" href="#pasos-para-la-importacion" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p><strong>Maak die inprop oop:</strong></p>
+<p>Gaan in QGIS na die “Inproppe”-kieslys en kies “Import kmz files” om die invoerdialoog oop te maak.</p>
+</li>
+<li><p><strong>Kies KMZ-lêer:</strong></p>
+<p>Klik op die “…”-knoppie langs die “KMZ-lêer”-veld en kies die <code class="docutils literal notranslate"><span class="pre">.kmz</span></code>-lêer wat jy van Geopaparazzi uitgevoer het.</p>
+</li>
+<li><p><strong>Kies die vorm:</strong></p>
+<p>Die inprop sal die KMZ-lêer ontleed en al die vorms (lae) wat dit vind in die “Kies die vorm om te verwerk”-aftrekkieslys lys. Kies die vorm wat jy wil invoer.</p>
+</li>
+<li><p><strong>Kies uitvoergids:</strong></p>
+<p>Klik op die “…”-knoppie langs “Uitvoergids” om die gids te kies waar die gevolglike CSV-lêer gestoor sal word.</p>
+</li>
+<li><p><strong>(Opsioneel) Herprojekteer koördinate:</strong></p>
+<p>As jy die oorspronklike koördinate (WGS84) na ‘n ander verwysingstelsel wil omskakel:</p>
+<ul class="simple">
+<li><p>Merk die “Herprojekteer na projek-CRS”-blokkie.</p></li>
+<li><p>Kies die bestemmings-CRS in die aftrekkieslys.</p></li>
+<li><p>Die uitvoer-CSV-lêer sal twee nuwe kolomme, <code class="docutils literal notranslate"><span class="pre">xtrsf</span></code> en <code class="docutils literal notranslate"><span class="pre">ytrsf</span></code>, met die herprojekteerde koördinate insluit.</p></li>
+</ul>
+</li>
+<li><p><strong>Verwerk:</strong></p>
+<p>Klik op die “Verwerk”-knoppie. Die inprop sal ‘n <code class="docutils literal notranslate"><span class="pre">.csv</span></code>-lêer in die uitvoergids skep. Die lêernaam sal gebaseer wees op die naam van die vorm wat jy gekies het (bv. <code class="docutils literal notranslate"><span class="pre">my_vorm.csv</span></code>).</p>
+</li>
+</ol>
+</section>
+<section id="resultado">
+<h2>Resultaat<a class="headerlink" href="#resultado" title="Link to this heading">¶</a></h2>
+<p>Wanneer jy klaar is, sal jy ‘n CSV-lêer in die uitvoergids vind, gereed om in QGIS as ‘n afgebakende tekslaag gelaai te word of om in ander sagteware ontleed te word.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">KMZ Geopapa Import</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, JMBA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

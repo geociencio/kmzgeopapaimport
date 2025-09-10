@@ -1,139 +1,62 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Welcome to Kmzgeopapaimport’s documentation! —
-      Kmzgeopapaimport 0.1 documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css">
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css">
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KMZ Geopapa Import Help</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2em;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 1em;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function redirectToLanguage() {
+            var lang = navigator.language || navigator.userLanguage;
+            var supportedLangs = {
+                'en': 'en',
+                'en-US': 'en',
+                'es': 'es',
+                'fr': 'fr',
+                'pt-BR': 'pt_BR',
+                'pt': 'pt_BR',
+                'de': 'de',
+                'af': 'af'
+            };
+            var redirectLang = supportedLangs[lang] || 'en';
+            window.location.href = 'build/' + redirectLang + '/index.html';
+        }
+        window.onload = redirectToLanguage;
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Kmzgeopapaimport 0.1 documentation" href="#">
-  </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related
-      navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li><a href="#">Kmzgeopapaimport 0.1 documentation</a> »</li>
-      </ul>
-    </div>
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            <div class="section"
-              id="welcome-to-kmzgeopapaimport-s-documentation">
-              <h1>Welcome to Kmzgeopapaimport’s documentation!<a
-                  class="headerlink"
-                  href="#welcome-to-kmzgeopapaimport-s-documentation"
-                  title="Permalink to this headline">¶</a></h1>
-              <p>This plugin is based on GeopaparazziTags without pykml
-                dependency (this is because i can't install pykml in my
-                pc)<br>
-              </p>
-              <p>In Geopaparazzi main window choose "export"<br>
-              </p>
-              <img alt="geo1" src="_images/geo1.PNG" height="557"
-                width="320">
-              <p><br>
-              </p>
-              <p>Choose KMZ icon<br>
-                <br>
-              </p>
-              <img alt="geo2" src="_images/geo2.PNG" height="564"
-                width="320">
-              <p><br>
-                So all data will be exported to the location showed<br>
-              </p>
-              <img alt="geo3" src="_images/geo3.PNG" height="561"
-                width="320">
-              <p><br>
-              </p>
-              <p>Copy KMZ file showed, as well "tags.json" file located
-                in geopaparazzi folder in the device to local drive
-                folder in pc<br>
-                (There is an example in
-                C:\Users\User\.qgis2\python\plugins\Kmzgeopapaimport\help\example)<br>
-              </p>
-              <img alt="folder1" src="_images/folder1.PNG" height="280"
-                width="504"><br>
-              <p>Go to Qgis and open Kmzgeopapaimport</p>
-              <p><img alt="qgis" src="_images/qgis1.PNG" height="418"
-                  width="808"><br>
-              </p>
-              <p><img alt="import1" src="_images/import1.PNG"
-                  height="227" width="534"> </p>
-              <br>
-              Findout JSON file<br>
-              <img alt="import2" src="_images/import2.PNG" height="228"
-                width="530"><br>
-              <br>
-              Choose the form to process<br>
-              <img alt="import3" src="_images/import3.PNG" height="229"
-                width="531"><br>
-              <br>
-              <br>
-              Findout KMZ file<br>
-              <img alt="IMPORT4" src="_images/import4.PNG" height="225"
-                width="531"><br>
-              <br>
-              <br>
-              Findout ouyput folder<br>
-              <img alt="import5" src="_images/import5.PNG" height="228"
-                width="532"><br>
-              <br>
-              <br>
-              Click process<br>
-              <img alt="import6" src="_images/import6.PNG" height="227"
-                width="529"><br>
-              <br>
-              The file is saved to output folder<br>
-              <img alt="final1" src="_images/final1.PNG" height="228"
-                width="497"><br>
-              <br>
-              It can be open it with Notepad++<br>
-              <img alt="final2" src="_images/final2.PNG" height="185"
-                width="1149"><br>
-              <br>
-              or opencalc<br>
-              <img alt="final3" src="_images/final3.PNG" height="189"
-                width="1081"><br>
-              <br>
-              or any other paid software to postprocess<br>
-              <div class="toctree-wrapper compound">
-                <ul class="simple">
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main
-        navigation">
-        <div class="sphinxsidebarwrapper">
-          <h3><a href="#">Table Of Contents</a></h3>
-          <ul>
-            <li><a class="reference internal" href="#">Welcome to
-                Kmzgeopapaimport’s documentation!</a></li>
-            <li><br>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer" role="contentinfo"> © Copyright 2014, Juan M.
-      Bernales. Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      1.3b1. </div>
-  </body>
+</head>
+<body>
+    <h1>KMZ Geopapa Import Help</h1>
+    <p>Redirecting to your language...</p>
+    <p>If you are not redirected, please select your language:</p>
+    <ul>
+        <li><a href="build/en/index.html">English</a></li>
+        <li><a href="build/es/index.html">Español</a></li>
+        <li><a href="build/fr/index.html">Français</a></li>
+        <li><a href="build/pt_BR/index.html">Português (Brasil)</a></li>
+        <li><a href="build/de/index.html">Deutsch</a></li>
+        <li><a href="build/af/index.html">Afrikaans</a></li>
+    </ul>
+</body>
 </html>

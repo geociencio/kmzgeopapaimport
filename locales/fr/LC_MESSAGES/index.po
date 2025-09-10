@@ -1,0 +1,126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, JMBA
+# This file is distributed under the same license as the KMZ Geopapa Import
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: KMZ Geopapa Import 0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-10 12:58-0400\n"
+"PO-Revision-Date: 2025-09-10 13:21+0000\n"
+"Last-Translator: Gemini <gemini@google.com>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../index.rst:3
+msgid "Guía de Usuario: KMZ Geopapa Import (v0.2)"
+msgstr "Guide de l'utilisateur : KMZ Geopapa Import (v0.2)"
+
+#: ../index.rst:5
+msgid "Este plugin para QGIS permite importar datos de archivos ``.kmz`` "
+"generados por la aplicación **Geopaparazzi**, convirtiéndolos en archivos"
+" CSV para su uso en QGIS u otro software."
+msgstr "Ce plugin pour QGIS permet d'importer des données depuis des fichiers ``.kmz`` "
+"générés par l'application **Geopaparazzi**, en les convertissant en fichiers"
+" CSV pour une utilisation dans QGIS ou un autre logiciel."
+
+#: ../index.rst:8
+msgid "Pasos para la importación"
+msgstr "Étapes d'importation"
+
+#: ../index.rst:10
+msgid "**Abrir el Plugin:**"
+msgstr "**Ouvrir le Plugin :**"
+
+#: ../index.rst:12
+msgid "En QGIS, ve al menú \"Complementos\" (Plugins) y selecciona \"Import kmz "
+"files\" para abrir el diálogo de importación."
+msgstr "Dans QGIS, allez dans le menu \"Extensions\" (Plugins) et sélectionnez \"Import kmz "
+"files\" pour ouvrir la boîte de dialogue d'importation."
+
+#: ../index.rst:14
+msgid "**Seleccionar Archivo KMZ:**"
+msgstr "**Sélectionner le fichier KMZ :**"
+
+#: ../index.rst:16
+msgid "Haz clic en el botón \"...\" junto al campo \"KMZ File\" y selecciona el "
+"archivo ``.kmz`` que exportaste desde Geopaparazzi."
+msgstr "Cliquez sur le bouton \"...\" à côté du champ \"Fichier KMZ\" et sélectionnez le "
+"fichier ``.kmz`` que vous avez exporté depuis Geopaparazzi."
+
+#: ../index.rst:18
+msgid "**Elegir el Formulario:**"
+msgstr "**Choisir le formulaire :**"
+
+#: ../index.rst:20
+msgid "El plugin analizará el archivo KMZ y listará todos los formularios "
+"(capas) que encuentre en el menú desplegable \"Choose the form to "
+"process\". Selecciona el formulario que deseas importar."
+msgstr "Le plugin analysera le fichier KMZ et listera tous les formulaires "
+"(couches) qu'il trouvera dans le menu déroulant \"Choisir le formulaire à "
+"traiter\". Sélectionnez le formulaire que vous souhaitez importer."
+
+#: ../index.rst:22
+msgid "**Seleccionar Carpeta de Salida:**"
+msgstr "**Sélectionner le dossier de sortie :**"
+
+#: ../index.rst:24
+msgid "Haz clic en el botón \"...\" junto a \"Output folder\" para elegir la "
+"carpeta donde se guardará el archivo CSV resultante."
+msgstr "Cliquez sur le bouton \"...\" à côté de \"Dossier de sortie\" pour choisir le "
+"dossier où le fichier CSV résultant sera enregistré."
+
+#: ../index.rst:26
+msgid "**(Opcional) Reproyectar Coordenadas:**"
+msgstr "**(Facultatif) Reprojeter les coordonnées :**"
+
+#: ../index.rst:28
+msgid "Si deseas convertir las coordenadas originales (WGS84) a otro sistema de "
+"referencia:"
+msgstr "Si vous souhaitez convertir les coordonnées d'origine (WGS84) vers un autre système de référence :"
+
+#: ../index.rst:30
+msgid "Activa la casilla \"Reproject to project CRS\"."
+msgstr "Cochez la case \"Reprojeter vers le SCR du projet\"."
+
+#: ../index.rst:31
+msgid "Elige el CRS de destino en el menú desplegable."
+msgstr "Choisissez le SCR de destination dans le menu déroulant."
+
+#: ../index.rst:32
+msgid "El archivo CSV de salida incluirá dos nuevas columnas, ``xtrsf`` y "
+"``ytrsf``, con las coordenadas reproyectadas."
+msgstr "Le fichier CSV de sortie inclura deux nouvelles colonnes, ``xtrsf`` et "
+"``ytrsf``, avec les coordonnées reprojetées."
+
+#: ../index.rst:34
+msgid "**Procesar:**"
+msgstr "**Traiter :**"
+
+#: ../index.rst:36
+msgid "Haz clic en el botón \"Process\". El plugin creará un archivo ``.csv`` en"
+" la carpeta de salida. El nombre del archivo se basará en el nombre del "
+"formulario que seleccionaste (ej. ``mi_formulario.csv``)."
+msgstr "Cliquez sur le bouton \"Traiter\". Le plugin créera un fichier ``.csv`` dans"
+" le dossier de sortie. Le nom du fichier sera basé sur le nom du "
+"formulaire que vous avez sélectionné (par ex. ``mon_formulaire.csv``)."
+
+#: ../index.rst:39
+msgid "Resultado"
+msgstr "Résultat"
+
+#: ../index.rst:41
+msgid "Al finalizar, encontrarás un archivo CSV en la carpeta de salida listo "
+"para ser cargado en QGIS como una capa de texto delimitado o para ser "
+"analizado en otro software."
+msgstr "Une fois terminé, vous trouverez un fichier CSV dans le dossier de sortie prêt "
+"à être chargé dans QGIS en tant que couche de texte délimité ou à être "
+"analysé dans un autre logiciel."

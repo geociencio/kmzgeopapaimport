@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Guía de Usuario: KMZ Geopapa Import (v0.2) &#8212; documentación de KMZ Geopapa Import - 0.2</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=ab63ebc7"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=f85f4cfb"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="guia-de-usuario-kmz-geopapa-import-v0-2">
+<h1>Guía de Usuario: KMZ Geopapa Import (v0.2)<a class="headerlink" href="#guia-de-usuario-kmz-geopapa-import-v0-2" title="Link to this heading">¶</a></h1>
+<p>Este plugin para QGIS permite importar datos de archivos <code class="docutils literal notranslate"><span class="pre">.kmz</span></code> generados por la aplicación <strong>Geopaparazzi</strong>, convirtiéndolos en archivos CSV para su uso en QGIS u otro software.</p>
+<section id="pasos-para-la-importacion">
+<h2>Pasos para la importación<a class="headerlink" href="#pasos-para-la-importacion" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p><strong>Abrir el Plugin:</strong></p>
+<p>En QGIS, ve al menú «Complementos» (Plugins) y selecciona «Import kmz files» para abrir el diálogo de importación.</p>
+</li>
+<li><p><strong>Seleccionar Archivo KMZ:</strong></p>
+<p>Haz clic en el botón «…» junto al campo «KMZ File» y selecciona el archivo <code class="docutils literal notranslate"><span class="pre">.kmz</span></code> que exportaste desde Geopaparazzi.</p>
+</li>
+<li><p><strong>Elegir el Formulario:</strong></p>
+<p>El plugin analizará el archivo KMZ y listará todos los formularios (capas) que encuentre en el menú desplegable «Choose the form to process». Selecciona el formulario que deseas importar.</p>
+</li>
+<li><p><strong>Seleccionar Carpeta de Salida:</strong></p>
+<p>Haz clic en el botón «…» junto a «Output folder» para elegir la carpeta donde se guardará el archivo CSV resultante.</p>
+</li>
+<li><p><strong>(Opcional) Reproyectar Coordenadas:</strong></p>
+<p>Si deseas convertir las coordenadas originales (WGS84) a otro sistema de referencia:</p>
+<ul class="simple">
+<li><p>Activa la casilla «Reproject to project CRS».</p></li>
+<li><p>Elige el CRS de destino en el menú desplegable.</p></li>
+<li><p>El archivo CSV de salida incluirá dos nuevas columnas, <code class="docutils literal notranslate"><span class="pre">xtrsf</span></code> y <code class="docutils literal notranslate"><span class="pre">ytrsf</span></code>, con las coordenadas reproyectadas.</p></li>
+</ul>
+</li>
+<li><p><strong>Procesar:</strong></p>
+<p>Haz clic en el botón «Process». El plugin creará un archivo <code class="docutils literal notranslate"><span class="pre">.csv</span></code> en la carpeta de salida. El nombre del archivo se basará en el nombre del formulario que seleccionaste (ej. <code class="docutils literal notranslate"><span class="pre">mi_formulario.csv</span></code>).</p>
+</li>
+</ol>
+</section>
+<section id="resultado">
+<h2>Resultado<a class="headerlink" href="#resultado" title="Link to this heading">¶</a></h2>
+<p>Al finalizar, encontrarás un archivo CSV en la carpeta de salida listo para ser cargado en QGIS como una capa de texto delimitado o para ser analizado en otro software.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">KMZ Geopapa Import</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegación</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, JMBA.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
